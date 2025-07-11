@@ -1,8 +1,8 @@
 package com.techlab.app.service;
 
-import java.util.List;
-
 import com.techlab.app.model.Order;
+
+import java.util.List;
 
 public interface OrderService {
     List<Order> findAll();

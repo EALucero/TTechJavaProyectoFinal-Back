@@ -1,16 +1,18 @@
 package com.techlab.app.service.impl;
 
+import com.techlab.app.dto.CategoryDTO;
+import com.techlab.app.dto.CategoryResponseDTO;
+import com.techlab.app.model.Category;
+import com.techlab.app.model.Product;
+import com.techlab.app.repository.CategoryRepository;
+import com.techlab.app.service.CategoryService;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-import com.techlab.app.model.Category;
-import com.techlab.app.repository.CategoryRepository;
-import com.techlab.app.service.CategoryService;
-import com.techlab.app.service.impl.CategoryServiceImpl;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +21,10 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<CategoryResponseDTO> findAll() {
+        return categoryRepository.findAll().stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
     @Override
@@ -34,7 +38,26 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category save(Category category) {
-        return categoryRepository.save(category);
+    public CategoryResponseDTO save(CategoryDTO dto) {
+        if (dto.getName() == null || dto.getName().isEmpty()) {
+            throw new IllegalArgumentException("El campo name no puede ser null o vacío");
+        }
+
+        Category category = new Category();
+        category.setName(dto.getName());
+
+        return toResponseDTO(categoryRepository.save(category));
     }
+
+    private CategoryResponseDTO toResponseDTO(Category category) {
+        List<Long> productIds = category.getProducts().stream()
+                .map(Product::getId)
+                .toList();
+
+        return new CategoryResponseDTO(
+                category.getId(),
+                category.getName(),
+                productIds);
+    }
+    
 }

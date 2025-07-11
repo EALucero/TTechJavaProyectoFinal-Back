@@ -1,14 +1,16 @@
 package com.techlab.app.controller;
 
-import com.techlab.app.model.Product;
+import com.techlab.app.dto.ProductDTO;
+import com.techlab.app.dto.ProductResponseDTO;
 import com.techlab.app.service.impl.ProductServiceImpl;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -16,28 +18,28 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
 
     private final ProductServiceImpl productService;
-
+    
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<ProductResponseDTO> getAllProducts() {
         return productService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponseDTO> getById(@PathVariable Long id) {
         return productService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
-        return productService.save(product);
+    public ResponseEntity<ProductResponseDTO> create(@Valid @RequestBody ProductDTO dto) {
+        return ResponseEntity.ok(productService.save(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product updated) {
+    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id, @RequestBody ProductDTO updated) {
         try {
-            Product result = productService.update(id, updated);
+            ProductResponseDTO result = productService.update(id, updated);
             return ResponseEntity.ok(result);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -50,4 +52,5 @@ public class ProductController {
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
+    
 }

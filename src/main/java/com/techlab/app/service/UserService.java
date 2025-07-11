@@ -1,13 +1,14 @@
 package com.techlab.app.service;
 
+import com.techlab.app.dto.UserDTO;
+import com.techlab.app.dto.UserResponseDTO;
+
 import java.util.List;
 import java.util.Optional;
 
-import com.techlab.app.model.User;
-
 public interface UserService {
-    List<User> findAll();
-    Optional<User> findById(Long id);
+    List<UserResponseDTO> findAll();
+    UserResponseDTO save(UserDTO dto);
+    Optional<UserResponseDTO> findById(Long id);
     boolean existsByEmail(String email);
-    User save(User user);
 }

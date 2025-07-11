@@ -1,14 +1,15 @@
 package com.techlab.app.controller;
 
-import com.techlab.app.model.User;
-import com.techlab.app.service.impl.UserServiceImpl;
-
-import java.util.List;
-
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import com.techlab.app.dto.UserDTO;
+import com.techlab.app.dto.UserResponseDTO;
+import com.techlab.app.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -16,25 +17,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.findAll();
+    public ResponseEntity<List<UserResponseDTO>> getAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
-        if (userService.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-        return ResponseEntity.ok(userService.save(user));
+    public ResponseEntity<UserResponseDTO> create(@RequestBody UserDTO dto) {
+        return ResponseEntity.ok(userService.save(dto));
+    }
+
+    @GetMapping("/exists")
+    public ResponseEntity<Boolean> existsByEmail(@RequestParam String email) {
+        return ResponseEntity.ok(userService.existsByEmail(email));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> getById(@PathVariable Long id) {
         return userService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    
 }

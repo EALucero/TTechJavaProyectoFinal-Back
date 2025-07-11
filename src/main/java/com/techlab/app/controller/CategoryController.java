@@ -1,33 +1,45 @@
 package com.techlab.app.controller;
 
-import com.techlab.app.model.Category;
-import com.techlab.app.service.impl.CategoryServiceImpl;
+import com.techlab.app.dto.CategoryDTO;
+import com.techlab.app.dto.CategoryResponseDTO;
+import com.techlab.app.model.Product;
+import com.techlab.app.service.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*")
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
-    private final CategoryServiceImpl categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping
-    public List<Category> getAllCategories() {
-        return categoryService.findAll();
+    public ResponseEntity<List<CategoryResponseDTO>> getAll() {
+        return ResponseEntity.ok(categoryService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Category> create(@RequestBody Category category) {
-        if (categoryService.existsByName(category.getName())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-        return ResponseEntity.ok(categoryService.save(category));
+    public ResponseEntity<CategoryResponseDTO> create(@RequestBody CategoryDTO dto) {
+        return ResponseEntity.ok(categoryService.save(dto));
     }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<CategoryResponseDTO> getByName(@PathVariable String name) {
+        return categoryService.findByName(name)
+                .map(category -> new CategoryResponseDTO(
+                        category.getId(),
+                        category.getName(),
+                        category.getProducts().stream()
+                                .map(Product::getId)
+                                .toList()))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+    
 }

@@ -1,7 +1,14 @@
 package com.techlab.app.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import jakarta.persistence.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -11,19 +18,11 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(columnDefinition = "json")
     private String itemsOrder;
-
-    public Order() {}
-
-    public Order(Long id, User user, String itemsOrder) {
-        this.id = id;
-        this.user = user;
-        this.itemsOrder = itemsOrder;
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -42,4 +41,5 @@ public class Order {
                 ", itemsOrder='" + itemsOrder + '\'' +
                 '}';
     }
+
 }

@@ -3,11 +3,11 @@ package com.techlab.app.controller;
 import com.techlab.app.model.Order;
 import com.techlab.app.service.impl.OrderServiceImpl;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -31,4 +31,5 @@ public class OrderController {
     public Order create(@RequestBody Order order) {
         return orderService.save(order);
     }
+    
 }

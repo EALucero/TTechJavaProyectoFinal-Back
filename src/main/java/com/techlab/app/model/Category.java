@@ -1,9 +1,18 @@
 package com.techlab.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -15,16 +24,9 @@ public class Category {
     @Column(length = 30, nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
-
-    // Getters, Setters, Constructors
-    public Category() {}
-
-    public Category(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -43,4 +45,5 @@ public class Category {
                 ", products=" + products +
                 '}';
     }
+
 }

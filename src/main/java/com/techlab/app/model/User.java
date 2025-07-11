@@ -1,9 +1,16 @@
 package com.techlab.app.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -21,17 +28,12 @@ public class User {
     @Column(length = 50, nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10, nullable = false)
+    private Role role;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
-
-    public User() {}
-
-    public User(Long id, String name, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -45,6 +47,9 @@ public class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
+    public Role getRole() { return role; }
+    public void setRole(Role user) { this.role = user; }
+
     public List<Order> getOrders() { return orders; }
     public void setOrders(List<Order> orders) { this.orders = orders; }
 
@@ -54,8 +59,8 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", orders=" + orders +
                 '}';
     }
+
 }

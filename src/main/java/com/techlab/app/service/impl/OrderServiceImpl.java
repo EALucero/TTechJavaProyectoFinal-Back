@@ -1,15 +1,15 @@
 package com.techlab.app.service.impl;
 
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
 import com.techlab.app.model.Order;
 import com.techlab.app.repository.OrderRepository;
 import com.techlab.app.service.OrderService;
 import com.techlab.app.service.impl.OrderServiceImpl;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,4 +31,5 @@ public class OrderServiceImpl implements OrderService {
     public Order save(Order order) {
         return orderRepository.save(order);
     }
+    
 }

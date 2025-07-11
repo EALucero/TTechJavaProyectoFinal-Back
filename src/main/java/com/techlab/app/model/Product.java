@@ -1,8 +1,16 @@
 package com.techlab.app.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "products")
 public class Product {
@@ -14,7 +22,7 @@ public class Product {
     @Column(length = 50, nullable = false, unique = true)
     private String name;
 
-    @Column(length = 140)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
@@ -25,20 +33,9 @@ public class Product {
     private Integer stock;
 
     @ManyToOne
-    @JoinColumn(name = "categoryId", nullable = false)
+    @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
-
-    public Product() {}
-
-    public Product(Long id, String name, String description, Double price, String image, Integer stock, Category category) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = BigDecimal.valueOf(price);
-        this.image = image;
-        this.stock = stock;
-        this.category = category;
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -73,4 +70,5 @@ public class Product {
                 ", category=" + category +
                 '}';
     }
+
 }
