@@ -1,12 +1,11 @@
 package com.techlab.app.dto;
 
-import java.math.BigDecimal;
-
-import jakarta.validation.constraints.NotNull;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+
+import java.math.BigDecimal;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor

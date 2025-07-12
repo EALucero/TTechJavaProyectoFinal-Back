@@ -1,4 +1,4 @@
-package com.techlab.app.model;
+package com.techlab.app.config;
 
 public enum Role {
     USER,

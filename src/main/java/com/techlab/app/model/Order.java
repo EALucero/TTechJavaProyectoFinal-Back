@@ -4,7 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import com.techlab.app.dto.ItemOrderDTO;
+import com.techlab.app.config.ItemsOrderConverter;
+
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,8 +27,12 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Convert(converter = ItemsOrderConverter.class)
     @Column(columnDefinition = "json")
-    private String itemsOrder;
+    private List<ItemOrderDTO> itemsOrder;
+
+    @Column(name = "total_price", nullable = false)
+    private BigDecimal totalPrice;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -30,15 +40,19 @@ public class Order {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
-    public String getItemsOrder() { return itemsOrder; }
-    public void setItemsOrder(String itemsOrder) { this.itemsOrder = itemsOrder; }
+    public List<ItemOrderDTO> getItemsOrder() { return itemsOrder; }
+    public void setItemsOrder(List<ItemOrderDTO> itemsOrder) { this.itemsOrder = itemsOrder; }
+
+    public BigDecimal getTotalPrice() { return totalPrice; }
+    public void setTotalPrice(BigDecimal totalPrice) { this.totalPrice = totalPrice; }
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
                 ", user=" + user +
-                ", itemsOrder='" + itemsOrder + '\'' +
+                ", itemsOrder='" + itemsOrder +
+                ", totalPrice"+ totalPrice + '\'' +
                 '}';
     }
 

@@ -1,10 +1,12 @@
 package com.techlab.app.controller;
 
-import com.techlab.app.model.Order;
-import com.techlab.app.service.impl.OrderServiceImpl;
+import com.techlab.app.dto.OrderDTO;
+import com.techlab.app.dto.OrderResponseDTO;
+import com.techlab.app.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,21 +17,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderServiceImpl orderService;
+    private final OrderService orderService;
 
-    @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.findAll();
+    @PostMapping
+    public ResponseEntity<OrderResponseDTO> create(@RequestBody OrderDTO dto) {
+        return ResponseEntity.ok(orderService.save(dto));
     }
 
-    @GetMapping("/user/{userId}")
-    public List<Order> getOrdersByUser(@PathVariable Long userId) {
+    @GetMapping("/users/{userId}")
+    public List<OrderResponseDTO> getOrdersByUser(@PathVariable Long userId) {
         return orderService.findByUserId(userId);
     }
 
-    @PostMapping
-    public Order create(@RequestBody Order order) {
-        return orderService.save(order);
+    @GetMapping
+    public ResponseEntity<List<OrderResponseDTO>> getAll() {
+        return ResponseEntity.ok(orderService.findAll());
     }
-    
+
 }

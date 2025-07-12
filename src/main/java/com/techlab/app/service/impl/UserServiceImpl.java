@@ -1,20 +1,19 @@
 package com.techlab.app.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.techlab.app.config.Role;
 import com.techlab.app.dto.UserDTO;
 import com.techlab.app.dto.UserResponseDTO;
-import com.techlab.app.model.Role;
 import com.techlab.app.model.User;
 import com.techlab.app.repository.UserRepository;
 import com.techlab.app.service.UserService;
 import com.techlab.app.service.impl.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -56,6 +55,8 @@ public class UserServiceImpl implements UserService {
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    
 
     private UserResponseDTO toResponseDTO(User user) {
         return new UserResponseDTO(

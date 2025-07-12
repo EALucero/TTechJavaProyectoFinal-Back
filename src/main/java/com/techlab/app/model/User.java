@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.techlab.app.config.Role;
+
 import jakarta.persistence.*;
 
 @Data
@@ -59,7 +62,8 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", orders=" + orders +
+                ", orders=" + orders + '\'' +
+                ", role=" + role +
                 '}';
     }
 
